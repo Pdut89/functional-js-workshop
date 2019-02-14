@@ -1,8 +1,6 @@
-var slice = Array.prototype.slice
-
 function logger(namespace) {
   return function() {
-    console.log.apply(this, [namespace, ...slice.call(arguments)])
+    console.log.apply(this, [namespace, ...arguments])
   }
 }
 
