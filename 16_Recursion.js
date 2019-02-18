@@ -1,44 +1,18 @@
-var loremIpsum = {
-  "name": "lorem-ipsum",
-  "version": "0.1.1",
-  "dependencies": {
-    "optimist": {
-      "version": "0.3.7",
-      "dependencies": {
-        "wordwrap": {
-          "version": "0.0.2"
-        }
-
-      }
-    },
-    "inflection": {
-      "version": "1.2.6"
-    }
-  }
-}
 
 function getDependencies(tree, result = []) {
-  console.log([tree])
-  if (!tree.hasOwnProperty('dependencies')) return result
+  if(!tree || !tree.hasOwnProperty('dependencies')) return result.sort()
 
   const {dependencies} = tree
 
-  Object.keys(dependencies).forEach(key => {
-    result = [...result, `${key}@${dependencies[key].version}`]
+  Object.keys(dependencies).forEach(dep => {
+    const nextTree = dependencies[dep]
+    const entry = `${dep}@${dependencies[dep].version}`
+    if(!result.includes(entry)) result.push(entry)
+
+    getDependencies(nextTree, result)
   })
 
-  return getDependencies(dependencies, result)
-
+  return result.sort()
 }
-
-
-
-
-
-console.log('result: ', getDependencies(loremIpsum))
-
-
-
-
 
 module.exports = getDependencies
